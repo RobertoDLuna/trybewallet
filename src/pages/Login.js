@@ -1,85 +1,82 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import saveEmail from '../actions';
+import PropTypes from 'prop-types';
+import { saveUserEmail } from '../actions';
 
 class Login extends React.Component {
   state = {
     email: '',
-    password: '',
+    senha: '',
+    btnDisabled: true,
+  };
 
+  validateLogin = () => {
+    const mailFormatValid = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+    const { email, senha } = this.state;
+    const validPassword = senha.length > '5';
+    const validEmail = email.match(mailFormatValid);
+    if (validEmail && validPassword) {
+      this.setState({
+        btnDisabled: false,
+      });
+    } else {
+      this.setState({
+        btnDisabled: true,
+      });
+    }
   }
 
   handleChange = ({ target }) => {
     const { value, name } = target;
-    this.setState({ [name]: value });
-  }
+    this.setState(() => ({
+      [name]: value,
+    }), this.validateLogin);
+  };
 
-  // onde peguei a expressão regular para validação de e-mail
-  // https://pt.stackoverflow.com/questions/1386/express%C3%A3o-regular-para-valida%C3%A7%C3%A3o-de-e-mail
-  validateEmailAndPassword = () => {
-    const minPassword = 6;
-    const validateEmail = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
-    const { email, password } = this.state;
-    return !(validateEmail.test(email) && password.length >= minPassword);
-  }
-
-  moveToWallet = () => {
-    const { history, add } = this.props;
+  login = () => {
+    const { saveUserData, history } = this.props;
     const { email } = this.state;
-    add(email);
+    saveUserData(email);
     history.push('/carteira');
   }
 
   render() {
-    const { email, password } = this.state;
+    const { email, senha, btnDisabled } = this.state;
     return (
       <div>
-        <div>img</div>
-        <div>
-          <label htmlFor="email-input">
-            Email:
-            <input
-              name="email"
-              value={ email }
-              type="email"
-              placeholder="Digite seu email"
-              data-testid="email-input"
-              onChange={ this.handleChange }
-            />
-          </label>
-          <label htmlFor="password-input" placeholder="Digite sua senha">
-            Senha:
-            <input
-              value={ password }
-              name="password"
-              type="password"
-              data-testid="password-input"
-              onChange={ this.handleChange }
-            />
-          </label>
-          <button
-            type="button"
-            disabled={ this.validateEmailAndPassword() }
-            onClick={ this.moveToWallet }
-          >
+        <h1>Login Page</h1>
+        <form>
+          <input
+            type="email"
+            name="email"
+            value={ email }
+            placeholder="E-mail"
+            data-testid="email-input"
+            onChange={ this.handleChange }
+          />
+          <input
+            type="password"
+            name="senha"
+            value={ senha }
+            placeholder="Senha"
+            data-testid="password-input"
+            onChange={ this.handleChange }
+          />
+          <button type="button" onClick={ this.login } disabled={ btnDisabled }>
             Entrar
           </button>
-        </div>
+        </form>
       </div>
     );
   }
 }
-
 const mapDispatchToProps = (dispatch) => ({
-  add: (email) => dispatch(saveEmail(email)),
+  saveUserData: (payload) => dispatch(saveUserEmail(payload)),
 });
 
-export default connect(null, mapDispatchToProps)(Login);
-
 Login.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func,
-  }).isRequired,
-  add: PropTypes.func.isRequired,
+  saveUserData: PropTypes.func.isRequired,
+  history: PropTypes.shape().isRequired,
 };
+
+export default connect(null, mapDispatchToProps)(Login);

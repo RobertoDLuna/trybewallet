@@ -1,4 +1,4 @@
-import { FETCH_CURRENCIES } from '../actions/index';
+import { FETCH_CURRENCIES } from '../store/actions/index';
 
 const INITIAL_STATE = { currencies: [] };
 

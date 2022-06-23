@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { saveUserEmail } from '../actions';
+import { saveUserEmail } from '../store/actions';
 
 class Login extends React.Component {
   state = {
@@ -11,6 +11,7 @@ class Login extends React.Component {
   };
 
   validateLogin = () => {
+    // achei essa expressão no stackOverFlow sobre como validar email.
     const mailFormatValid = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
     const { email, senha } = this.state;
     const validPassword = senha.length > '5';

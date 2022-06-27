@@ -40,7 +40,7 @@ class Wallet extends React.Component {
 
   render() {
     const { userEmail, currencies, expenses } = this.props;
-    const { value, description, currency, method, tag } = this.state;
+    const { value, description } = this.state;
     return (
       <div>
         <h1>TrybeWallet</h1>

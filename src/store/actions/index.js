@@ -1,5 +1,6 @@
 export const USER_EMAIL = 'USER_EMAIL';
 export const FETCH_CURRENCIES = 'FETCH_CURRENCIES';
+export const SAVE_EXPENSES = 'SAVE_EXPENSES';
 
 export const saveUserEmail = (payload) => ({
   type: USER_EMAIL,
@@ -9,6 +10,11 @@ export const saveUserEmail = (payload) => ({
 const saveCurrencies = (json) => ({
   type: FETCH_CURRENCIES,
   payload: json,
+});
+
+export const saveExchangeRates = (payload) => ({
+  type: SAVE_EXPENSES,
+  payload,
 });
 
 export const fetchCurrencies = () => (
